@@ -1,0 +1,43 @@
+#!/bin/bash
+
+OPTS=""
+
+SCRIPTNAME=`basename $0`
+function print_help()
+{
+    echo "Produce a movie from a series of JPG files."
+    echo
+    echo "  USAGE: $SCRIPTNAME [options] BASENAME"
+    echo
+    echo "Input JPG Frames:"
+    echo "  BASENAME*.jpg"
+    echo "Output file:"
+    echo "  BASENAME.avi"
+    echo
+    echo "Options:"
+    echo " -fps <num>  Frames per second"
+    echo
+    exit 1
+}
+
+while [ x"$1" != x"" ]
+do
+    case "$1" in
+	"-fps")
+	    OPTS="$OPTS:fps=$2"
+	    shift;;
+	*)
+	    VAR="$1"
+	    ;;
+    esac
+    shift
+done
+
+if [ x"$VAR" == x"" ]; then
+    print_help
+fi
+
+mencoder "mf://$VAR*.jpg" -mf type=jpg"$OPTS" -ovc lavc -lavcopts vcodec=mpeg4:vqscale=2 -nosound -o "$VAR.avi"
+
+# mencoder "mf://$VAR*.jpg" -mf type=jpg"$OPTS" -ovc x264 -nosound -o "$VAR.avi"
+# ffmpeg -f image2 -i "xyt-%04d.jpg" output_south.mp4

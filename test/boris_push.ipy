@@ -1,0 +1,118 @@
+
+from time import sleep
+
+dtype = np.float32
+
+uy0 = 1.0
+ux0 = vz0 = 0.
+vth = .5
+dt = 0.02/2**2
+tmax = 100.
+qms = 1.
+
+npcle = 10
+lmax = 100.
+E0 = 10
+B0 = 10
+
+def EE(x):
+    ee = zeros((npcle, 3), dtype=dtype)
+    ee[:,1] = E0
+    return ee
+
+def BB(x):
+    bb = zeros((npcle, 3), dtype=dtype)
+    bb[:,2] = B0
+    return bb
+
+px2 = lmax*rand(npcle, 2) # 2 spatial
+pv2 = zeros((npcle, 3))
+pv2[:,1] = normal(loc=uy0, scale=vth, size=npcle) # v0_y
+
+px2 = px2.astype(dtype)
+pv2 = pv2.astype(dtype)
+
+px1 = px2.copy()
+pv1 = pv2.copy()
+
+clf()
+gca().set_aspect('equal')
+grid('on')
+xlim(0, lmax); ylim(0, lmax)
+
+#@jit
+def advance(pxa,pva, pxo,pvo, pxc,pvc):
+    # This must be done as some input variables may point to the same array in memory
+    pe = EE(pxc)
+    pb = BB(pxc)
+    eps = qms * dt / 2.
+    tv = eps * pb
+    tmp = 2. / (1.+tv[:,0]**2 + tv[:,1]**2 + tv[:,2]**2)
+    sv = tv.copy()
+    sv[:,0] *= tmp
+    sv[:,1] *= tmp
+    sv[:,2] *= tmp
+
+    pxa = pxo + dt*pvc[:,0:2]
+
+    pvm = pvo + eps*pe
+    pvs = pvm + cross(pvm, tv)
+    pvp = pvm + cross(pvs, sv)
+    pva = pvp + eps*pe
+    return (pxa, pva)
+
+itmax = int(tmax/dt)
+px = zeros((itmax,npcle,2), dtype=dtype)
+pv = zeros((itmax,npcle,3), dtype=dtype)
+for it in arange(itmax):
+    px1 = 0.5 * (px1 + px2)
+    pv1 = 0.5 * (pv1 + pv2)
+
+    (px1, pv1) = advance(px1,pv1, px1,pv1, px2,pv2)
+    (px1, px2) = (px2, px1) # swap position
+    (pv1, pv2) = (pv2, pv1) # swap velocity
+    (px2, pv2) = advance(px1,pv1, px1,pv1, px2,pv2)
+
+    px[it,:,:] = px2
+    pv[it,:,:] = pv2
+    # plot(px2[:,0], px2[:,1], '.k')
+    # draw()
+    # show()
+    # print 'it = %d, max(px) = %.3f' % (it, max(px2))
+    # raw_input('[enter]')
+    #sleep(2)
+
+
+ke = 0.5*(pv[:,:,0]**2 + pv[:,:,1]**2 + pv[:,:,2]**2)
+pe = -E0*px[:,:,1]
+ke0 = ke[0,:].copy()
+pe0 = pe[0,:].copy()
+te0 = pe0 + ke0
+for ip in range(npcle):
+    ke[:,ip] -= ke[0,ip]
+    pe[:,ip] -= pe[0,ip]
+
+
+fsize=14
+mpl.rcParams.update({'font.size': fsize})
+
+ip = 0
+clf()
+for ip in range(npcle):
+    plot(px[:,ip,0], px[:,ip,1], '.-k', ms=2.)
+    plot(px[0,ip,0], px[0,ip,1], '.b')
+    plot(px[-1,ip,0], px[-1,ip,1], '.r')
+axis('equal')
+
+# clf()
+# plot(100*(ke[-1,:]-ke[0,:]/ke[0,:]), '.k')
+
+clf();
+taxis = dt*arange(ke.shape[0])
+for ip in range(npcle):
+    plot(taxis, (ke[:,ip]+pe[:,ip])/te0[ip]*100.)
+grid('on')
+xlabel('$time\/ \mathrm{(1/\Omega_p)}$', fontsize=fsize)
+ylabel('$\delta TE\/ /\/ TE_0\/ \mathrm{(\%)}$', fontsize=fsize)
+title('%s, dt = %s' % (dtype, dt))
+lpy.savefigs('pcle_boris_err')

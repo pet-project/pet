@@ -1,0 +1,71 @@
+
+from __future__ import division,print_function
+from pet import pet
+
+fsize = 18
+matplotlib.rcParams.update({'font.size': fsize})
+
+p=pet.Patch()
+# p.initialize(10,2,1)
+
+# X
+points = linspace(0, 10, p.QE.shape[0])
+p.QE[:,:,:, 0] = tile(points, (p.QE.shape[2],p.QE.shape[1],1)).T
+# Y
+points = linspace(0.5, 1.0, p.QE.shape[0])
+points = 0.5 + 1.5* np.sin(pi * linspace(0,1,p.QE.shape[0]))
+p.QE[:,0,:, 1] = tile(-points, (2,1)).T # 1.
+p.QE[:,1,:, 1] = 0
+p.QE[:,2,:, 1] = tile(+points, (2,1)).T # 1.
+# Z
+p.QE[:,:,0, 2] = 0.
+p.QE[:,:,1, 2] = 1.
+
+p.calc_grid_B()
+
+##################  PLOT  ##################
+
+plt.close('all')
+fig = plt.figure(figsize=(8,4))
+fig.clear()
+
+ax = fig.add_subplot(111)
+
+ax.plot(p.QE[:,:,0, 0], p.QE[:,:,0, 1], 'or', ms=7.)
+ax.plot(p.QE[:,:,0, 0], p.QE[:,:,0, 1], 'ok', ms=2.)
+ax.plot(p.QB[:,:,0, 0], p.QB[:,:,0, 1], 'ob', ms=7.)
+ax.plot(p.QB[:,:,0, 0], p.QB[:,:,0, 1], 'ok', ms=2.)
+
+pcargs = dict(lw=1.2, edgecolor='k', alpha=.2)
+ax.pcolormesh(p.QE[:,:,0, 0], p.QE[:,:,0, 1], p.QE[:,:,0, 0], **pcargs)
+# pcolormesh(p.QB[:,:,0, 0], p.QB[:,:,0, 1], p.QB[:,:,0, 0], **pcargs)
+
+qvargs = dict(width=.004, scale=30)
+
+
+ax.quiver(0.5*(p.QE[:,0:-1,0, 0]+p.QE[:,1:,0, 0]),
+            0.5*(p.QE[:,0:-1,0, 1]+p.QE[:,1:,0, 1]),
+            p.AB0[:,:,0, 0], p.AB0[:,:,0, 1],**qvargs)
+ax.quiver(0.5*(p.QE[0:-1,:,0, 0]+p.QE[1:,:,0, 0]),
+            0.5*(p.QE[0:-1,:,0, 1]+p.QE[1:,:,0, 1]),
+            p.AB1[:,:,0, 0], p.AB1[:,:,0, 1],**qvargs)
+
+de0x = 0.5 * (p.QE[:,:-1,:, :] + p.QE[:,1:,:, :])
+de1x = 0.5 * (p.QE[:-1,:,:, :] + p.QE[1:,:,:, :])
+ax.quiver(de0x[:,:,0, 0], de0x[:,:,0, 1], p.DE0[:,:-1,0, 0], p.DE0[:,:-1,0, 1], color='b', **qvargs)
+ax.quiver(de1x[:,:,0, 0], de1x[:,:,0, 1], p.DE1[:-1,:,0, 0], p.DE1[:-1,:,0, 1], color='b', **qvargs)
+
+db0x = 0.5 * (p.QE[:-1,:,:, :] + p.QE[1:,:,:, :])
+db1x = 0.5 * (p.QE[:,:-1,:, :] + p.QE[:,1:,:, :])
+ax.quiver(db0x[:,:,0, 0], db0x[:,:,0, 1], p.DB0[:-1,:,0, 0], p.DB0[:-1,:,0, 1], color='r', **qvargs)
+ax.quiver(db1x[:,:,0, 0], db1x[:,:,0, 1], p.DB1[:,:-1,0, 0], p.DB1[:,:-1,0, 1], color='r', **qvargs)
+
+ax.grid('on')
+ax.axis('equal')
+ax.set_xlim(-1,11)
+# ax.set_ylim(-3,3)
+
+ax.set_axisbelow(True)
+
+fig.savefig('fig/grid.pdf', bbox_inches='tight')
+fig.savefig('fig/grid.png', bbox_inches='tight', dpi=150)
