@@ -1,5 +1,4 @@
 
-
 # PET (Paral's Plasma Physics Toolkit) #
 
 PET project for plasma simulations
@@ -12,14 +11,18 @@ PET project for plasma simulations
 
 For read only access:
 
-> cd
-> git clone https://github.com/pet-project/pet.git
+```bash
+cd
+git clone https://github.com/pet-project/pet.git
+```
 
 For development, you must set up your GitHub account with SSH keys and checkout
 `PET` as follows:
 
->> cd
->> git clone git@github.com:pet-project/pet.git
+```bash
+cd
+git clone git@github.com:pet-project/pet.git
+```
 
 Setting up SSH keys and using native GIT transport protocol is better in that
 you don't have to provide credentials all the time.
