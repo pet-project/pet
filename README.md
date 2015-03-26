@@ -54,3 +54,11 @@ and place the file in `doc/incoming/name_of_feature.md`. This is particularly
 useful when you are submitting a change which is not backward compatible or
 some major enhancement. Once we are ready for release we will move the changes
 into `CHANGELOG.md` file.
+
+## Contact Us ##
+
+Please contact us at any of these communication channels:
+* [PET-usr](https://groups.google.com/forum/#!forum/pet-usr) Google group for
+  users.
+* [PET-dev](https://groups.google.com/forum/#!forum/pet-dev) Google group for
+  developers.
