@@ -15,7 +15,11 @@ For Users
 For Developers
 --------------
 
-**TODO**
+.. toctree::
+   :maxdepth: 1
+
+   changelog
+   contrib
 
 Contact Us
 ----------
@@ -34,3 +38,4 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
+* :doc:`contrib`
