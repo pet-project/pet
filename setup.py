@@ -148,9 +148,10 @@ def collect_extensions():
 
     return cythonize(extensions, gdb_debug=DEBUG)
 
+from pet import version as petversion
 setup(
     name = 'pet',
-    version = '0.1',
+    version = petversion.full,
     author = 'Jan Paral',
     license = 'GNU',
     packages = find_packages(),
