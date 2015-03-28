@@ -3,6 +3,4 @@
 # pip install -r require.txt
 #
 cython >=0.22
-sphinx >=1.3
-sphinx-bootstrap-theme
-sphinxcontrib-bibtex
+nummpy

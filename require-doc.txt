@@ -1,0 +1,7 @@
+# To install necessary requirements, run following command:
+#
+# pip install -r require-doc.txt
+#
+sphinx >=1.3
+sphinx-bootstrap-theme
+sphinxcontrib-bibtex

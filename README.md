@@ -5,6 +5,8 @@ PET project for plasma simulations
 
 Documentation: [Read the Docs](http://pet.readthedocs.org/en/latest/)
 
+[![Documentation Status](https://readthedocs.org/projects/pet/badge/?version=latest)](https://readthedocs.org/projects/pet/?badge=latest)
+
 ## Prerequisites ##
 
 * [Cython](http://www.cython.org) (>= 0.22)
