@@ -6,6 +6,7 @@ PET project for plasma simulations
 ## Prerequisites ##
 
 * [Cython](http://www.cython.org) (>= 0.19)
+* sphinx (>= 1.3)
 * sphinx-bootstrap-theme (>= 0.4):
   [GitHub](http://github.com/mcmtroffaes/sphinxcontrib-bibtex/),
   [Documentation](http://sphinxcontrib-bibtex.readthedocs.org/en/latest/)
