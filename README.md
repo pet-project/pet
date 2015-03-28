@@ -3,9 +3,11 @@
 
 PET project for plasma simulations
 
+Documentation: [Read the Docs](http://pet.readthedocs.org/en/latest/)
+
 ## Prerequisites ##
 
-* [Cython](http://www.cython.org) (>= 0.19)
+* [Cython](http://www.cython.org) (>= 0.22)
 * sphinx (>= 1.3)
 * sphinx-bootstrap-theme (>= 0.4):
   [GitHub](http://github.com/mcmtroffaes/sphinxcontrib-bibtex/),
@@ -13,7 +15,7 @@ PET project for plasma simulations
 * sphinxcontrib-bibtex (>= 0.3):
   [GitHub](http://github.com/mcmtroffaes/sphinxcontrib-bibtex/),
   [Documentation](http://sphinxcontrib-bibtex.readthedocs.org/)
-  
+
 ## Download ##
 
 For read only access:
